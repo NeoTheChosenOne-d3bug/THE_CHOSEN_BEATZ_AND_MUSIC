@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Chosen Beatz & Music — Preview (Polished)</title>
+  <meta name="description" content="Polished preview: store, streaming player, upload demo, T&Cs and privacy. Uses the provided logo for branding." />
+  <style>
+    :root{
+      --bg:#071021; --panel:#0f1220; --muted:#9aa3b2; --text:#eef2f7; --accent:#7c5cff; --accent-2:#00e0a4;
+      --success:#00c48c; --danger:#ff5c7c; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:linear-gradient(180deg,#020316 0%, #071021 100%);-webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:28px auto;padding:20px}
+
+    header{display:flex;align-items:center;gap:16px}
+    .brand-row{display:flex;align-items:center;gap:12px}
+    .brand-row img{height:46px;width:46px;object-fit:cover;border-radius:8px}
+    .site-title{font-weight:800;font-size:1.05rem}
+    nav{margin-left:auto;display:flex;gap:8px}
+    .btn{background:linear-gradient(180deg,var(--panel),#0b1118);border:1px solid rgba(255,255,255,.04);padding:8px 12px;border-radius:10px;color:var(--text);cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none}
+
+    /* hero */
+    .hero{display:flex;gap:20px;align-items:center;padding:22px;border-radius:14px;background:linear-gradient(180deg, rgba(124,92,255,0.06), rgba(0,224,164,0.02));border:1px solid rgba(255,255,255,0.03);margin-top:18px}
+    .hero img{width:420px;height:240px;object-fit:cover;border-radius:10px}
+    .hero h1{margin:0;font-size:2rem}
+    .hero p{color:var(--muted);margin-top:8px;max-width:48ch}
+
+    /* grid */
+    .controls-bar{display:flex;gap:8px;margin-top:18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.03);display:flex;flex-direction:column}
+    .cover{height:120px;border-radius:8px;background:#111;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);font-weight:700;background-size:cover;background-position:center}
+    .meta{color:var(--muted);font-size:.86rem;margin-top:8px}
+    .card .row{display:flex;align-items:center;gap:8px;margin-top:auto}
+    .price{font-weight:800}
+
+    /* upload */
+    .upload{margin-top:18px;padding:12px;border-radius:12px;border:1px dashed rgba(255,255,255,.04);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));}
+    .drop{padding:18px;border-radius:10px;background:#0c1116;border:1px solid rgba(255,255,255,.02);text-align:center}
+
+    /* player */
+    .player-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:linear-gradient(90deg,#0a0d12,#0e141b);padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.04);display:flex;gap:12px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,.6);width:min(980px,calc(100% - 40px))}
+    .player-info{min-width:200px}
+    .player-controls{display:flex;align-items:center;gap:8px}
+    .prog{height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;width:420px}
+    .prog > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+    .wave{width:180px;height:36px}
+
+    /* responsive */
+    @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.hero img{display:none}.player-bar{width:calc(100% - 28px);}}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}.brand-row img{height:40px}}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:50}
+    .modal.open{display:flex}
+    .modal .panel{background:var(--panel);padding:18px;border-radius:12px;max-width:820px;color:var(--text);border:1px solid rgba(255,255,255,.03);max-height:80vh;overflow:auto}
+    .legal h3{margin-top:0}
+
+    footer{margin-top:36px;text-align:center;color:var(--muted);padding:30px 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand-row">
+        <!-- use uploaded logo path as instructed -->
+        <img src="/mnt/data/logo.jpg" alt="logo">
+        <div>
+          <div class="site-title">The Chosen Beatz & Music</div>
+          <div style="color:var(--muted);font-size:.85rem">Store • Streams • Uploads (demo)</div>
+        </div>
+      </div>
+      <nav>
+        <button class="btn">Store</button>
+        <button class="btn">Streams</button>
+        <button class="btn">Upload</button>
+        <button class="btn">Login</button>
+        <button class="btn primary" id="openLegal">T&Cs / Privacy</button>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <img src="/mnt/data/logo.jpg" alt="hero artwork">
+      <div>
+        <h1 id="hero-title">The Chosen Beatz & Music</h1>
+        <p>Stream previews in high quality (listening-only). Buy licences securely. Upload your own tracks for listening-only sharing with the community.</p>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn primary">Browse Featured</button>
+          <button class="btn" id="scrollUpload">Upload (demo)</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls-bar">
+      <input id="search" placeholder="Search by title, producer or tag…" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.03);background:#09111a;color:var(--text)">
+      <select id="sort" style="padding:10px;border-radius:10px;background:#09111a;color:var(--text);border:1px solid rgba(255,255,255,.03)">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+      </select>
+    </div>
+
+    <section aria-label="Catalog">
+      <h2 style="margin-top:18px">Featured Beats & Packs</h2>
+      <div class="grid" id="catalog"></div>
+    </section>
+
+    <section class="upload" id="uploadSection">
+      <h3>Upload (demo — listening only)</h3>
+      <div class="drop" id="dropArea">
+        <p>Drag & drop audio here or click to choose. Files are not uploaded to a server in this demo.</p>
+        <input type="file" id="fileInput" accept="audio/*" style="display:none">
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+          <button class="btn" id="chooseFile">Choose File</button>
+          <button class="btn primary" id="publish" disabled>Publish (demo)</button>
+        </div>
+      </div>
+      <div id="uploadPreview" style="margin-top:12px;color:var(--muted)"></div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> The Chosen Beatz & Music — Demo. All rights reserved.
+      <div style="margin-top:6px;color:var(--muted);font-size:.85rem">For testing only — not a production deployment.</div>
+    </footer>
+  </div>
+
+  <!-- mini player -->
+  <div class="player-bar" role="region" aria-label="Mini player">
+    <div class="player-info">
+      <div style="font-weight:700" id="trackTitle">Nothing playing</div>
+      <div id="trackMeta" style="font-size:.85rem;color:var(--muted)"></div>
+    </div>
+    <div class="player-controls">
+      <button class="btn" id="playPause">Play</button>
+      <div class="prog" aria-hidden="true"><i id="progFill"></i></div>
+      <div class="wave"><canvas id="waveCanvas" width="180" height="36"></canvas></div>
+      <div style="margin-left:8px;color:var(--muted)">$<span id="playerPrice">0.00</span></div>
+      <button class="btn primary" id="buyNow">Buy License</button>
+    </div>
+    <audio id="audio" crossorigin="anonymous" preload="none"></audio>
+  </div>
+
+  <!-- Legal modal -->
+  <div class="modal" id="legalModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="panel legal">
+      <button class="btn" id="closeLegal" style="float:right">Close</button>
+      <h2>Terms & Conditions</h2>
+      <p>Welcome to The Chosen Beatz & Music. These Terms govern your use of the site. By using the service you agree to the following:</p>
+      <h3>License types & ownership</h3>
+      <p>All beats and sample packs are provided by individual producers. Purchasing a licence grants only the rights described on the product page (non-exclusive, limited, or exclusive if explicitly stated). Producers retain ownership of the underlying composition and master recordings unless a separate assignment is provided.</p>
+      <h3>Prohibited uses</h3>
+      <p>Users may not redistribute or publicly perform purchased files beyond the licence terms. Unauthorized sharing of source files, attempting to bypass streaming protections, or republishing others' content is prohibited.</p>
+      <h3>Refunds & disputes</h3>
+      <p>Refunds are handled case-by-case. Contact support with proof of purchase and explanation. Our payments are processed by third-party providers — we do not store card data.</p>
+      <h3>Community uploads</h3>
+      <p>Uploads are for streaming-only in this demo. By uploading, you confirm you own the rights to share the content and grant the platform a licence to host and stream it.</p>
+      <h3>Privacy</h3>
+      <p>We collect minimal information: email and payment metadata for purchases. Read our Privacy Policy for details.</p>
+      <h3>Governing law</h3>
+      <p>These Terms are governed by the laws of the country of the platform operator. This demo uses a generic policy; consult a lawyer before publishing.</p>
+      <hr>
+      <h3>Privacy Policy (short)</h3>
+      <p>We collect and store user contact details, transaction records and uploads. We use industry standard security practices, but you should not upload sensitive personal data. We may use cookies and analytics to improve the service.</p>
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" id="acceptLegal">I understand</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Move all DOM interaction inside DOMContentLoaded to avoid null references
+    document.addEventListener('DOMContentLoaded', function(){
+      // ====== Catalog demo data ======
+      const CATALOG = [
+        {id:'b001',title:'Skyline Drip',producer:'NeoSound',genre:'Trap',bpm:144,price:29.00, preview:'/mnt/data/logo.jpg', src: ''},
+        {id:'b002',title:'Savanna Heat',producer:'MzansiWaves',genre:'Afrobeats',bpm:110,price:34.00, preview:'/mnt/data/logo.jpg', src: ''},
+        {id:'b003',title:'Midnight Silk',producer:'Lunar',genre:'R&B',bpm:92,price:24.00, preview:'/mnt/data/logo.jpg', src: ''},
+        {id:'b004',title:'Coffee Shop',producer:'QuietLoop',genre:'Lo-Fi',bpm:78,price:19.00, preview:'/mnt/data/logo.jpg', src: ''},
+        {id:'s101',title:'Neon Trap Kit Vol.1',producer:'BeatBazaar',genre:'Trap',bpm:0,price:39.00, preview:'/mnt/data/logo.jpg', src: ''},
+        {id:'b005',title:'Warehouse Glow',producer:'D13',genre:'House',bpm:126,price:32.00, preview:'/mnt/data/logo.jpg', src: ''}
+      ];
+
+      // Safe DOM queries
+      const catalogEl = document.getElementById('catalog');
+      const tpl = document.getElementById('cardTpl');
+      const audio = document.getElementById('audio');
+      const playPause = document.getElementById('playPause');
+      const progFill = document.getElementById('progFill');
+      const trackTitle = document.getElementById('trackTitle');
+      const trackMeta = document.getElementById('trackMeta');
+      const playerPrice = document.getElementById('playerPrice');
+      const waveCanvas = document.getElementById('waveCanvas');
+      const waveCtx = waveCanvas && waveCanvas.getContext ? waveCanvas.getContext('2d') : null;
+
+      if(!catalogEl || !tpl){ console.error('Required template or container missing'); return; }
+
+      // ====== Render catalog ======
+      function renderCatalog(list){
+        catalogEl.innerHTML='';
+        list.forEach(item=>{
+          const node = tpl.content.firstElementChild.cloneNode(true);
+          const cover = node.querySelector('.cover');
+          if(cover) cover.style.backgroundImage = `url(${item.preview})`;
+          const titleEl = node.querySelector('.title'); if(titleEl) titleEl.textContent = item.title;
+          const metaEl = node.querySelector('.meta'); if(metaEl) metaEl.textContent = `${item.producer} • ${item.genre}${item.bpm? ' • '+item.bpm+' BPM':''}`;
+          const priceEl = node.querySelector('.price'); if(priceEl) priceEl.textContent = '$'+item.price.toFixed(2);
+
+          const playBtn = node.querySelector('.play');
+          if(playBtn) playBtn.addEventListener('click', ()=> playItem(item));
+          const addBtn = node.querySelector('.add');
+          if(addBtn) addBtn.addEventListener('click', ()=> addToCart(item));
+
+          catalogEl.appendChild(node);
+        });
+      }
+
+      function addToCart(item){ alert(`(Demo) Added "${item.title}" to cart.`); }
+
+      // ====== Mini player ======
+      let current = null; let raf = null;
+
+      function playItem(item){
+        if(!item.src){ playSynthetic(item); return; }
+        current = item;
+        if(audio){ audio.src = item.src; audio.play().catch(()=>{}); }
+        if(trackTitle) trackTitle.textContent = item.title;
+        if(trackMeta) trackMeta.textContent = item.producer + ' • ' + item.genre;
+        if(playerPrice) playerPrice.textContent = item.price.toFixed(2);
+        if(playPause) playPause.textContent = 'Pause';
+        startVisuals();
+      }
+
+      function playSynthetic(item){
+        current = item;
+        if(trackTitle) trackTitle.textContent = item.title + ' (demo)';
+        if(trackMeta) trackMeta.textContent = item.producer + ' • ' + item.genre;
+        if(playerPrice) playerPrice.textContent = item.price.toFixed(2);
+        if(playPause) playPause.textContent = 'Pause';
+
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.value = 110 + (item.bpm||100)%200;
+        gain.gain.value = 0.05;
+        osc.connect(gain); gain.connect(ctx.destination); osc.start();
+        setTimeout(()=>{ try{ osc.stop(); ctx.close(); }catch(e){} if(playPause) playPause.textContent='Play'; stopVisuals(); },18000);
+        startVisuals(true);
+      }
+
+      if(playPause) playPause.addEventListener('click', ()=>{
+        if(audio && audio.src && !audio.paused){ audio.pause(); if(playPause) playPause.textContent='Play'; stopVisuals(); }
+        else if(audio && audio.src){ audio.play().catch(()=>{}); if(playPause) playPause.textContent='Pause'; startVisuals(); }
+        else { if(playPause && playPause.textContent==='Play'){ playPause.textContent='Pause'; startVisuals(true); } else { if(playPause) playPause.textContent='Play'; stopVisuals(); } }
+      });
+
+      function startVisuals(synthetic){
+        let t = 0; const dur = 18; cancelAnimationFrame(raf);
+        function frame(){ t += 1/60; const pct = Math.min(100, (t/dur)*100); if(progFill) progFill.style.width = pct + '%'; if(waveCtx) drawWave(Math.sin(t*2)+Math.random()*0.4); if(pct < 100) raf = requestAnimationFrame(frame); else cancelAnimationFrame(raf); }
+        raf = requestAnimationFrame(frame);
+      }
+      function stopVisuals(){ cancelAnimationFrame(raf); if(progFill) progFill.style.width = '0%'; if(waveCtx) clearWave(); }
+
+      function drawWave(v){ if(!waveCtx) return; const w = waveCanvas.width, h = waveCanvas.height; waveCtx.clearRect(0,0,w,h); waveCtx.fillStyle = 'rgba(255,255,255,0.04)'; waveCtx.fillRect(0,0,w,h); waveCtx.beginPath(); waveCtx.moveTo(0,h/2); for(let x=0;x<w;x++){ const y = h/2 + Math.sin((x/w)*Math.PI*2*2 + (performance.now()/500)) * (h/4) * (0.6 + 0.4*Math.abs(Math.sin(performance.now()/1000))); waveCtx.lineTo(x,y); } waveCtx.strokeStyle = 'rgba(124,92,255,0.9)'; waveCtx.lineWidth = 1.6; waveCtx.stroke(); }
+      function clearWave(){ if(waveCtx) waveCtx.clearRect(0,0,waveCanvas.width,waveCanvas.height); }
+
+      // ====== Upload handlers (demo only) ======
+      const drop = document.getElementById('dropArea');
+      const fileInput = document.getElementById('fileInput');
+      const chooseFile = document.getElementById('chooseFile');
+      const publish = document.getElementById('publish');
+      const uploadPreview = document.getElementById('uploadPreview');
+
+      if(chooseFile) chooseFile.addEventListener('click', ()=> fileInput && fileInput.click());
+      if(drop) drop.addEventListener('click', ()=> fileInput && fileInput.click());
+      if(drop) drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='rgba(124,92,255,.6)'; });
+      if(drop) drop.addEventListener('dragleave', ()=>{ drop.style.borderColor='rgba(255,255,255,.02)'; });
+      if(drop) drop.addEventListener('drop', (e)=>{ e.preventDefault(); handleFiles(e.dataTransfer.files); });
+      if(fileInput) fileInput.addEventListener('change', (e)=> handleFiles(e.target.files));
+
+      let pendingFile = null;
+      function handleFiles(files){ if(!files || !files.length) return; const f = files[0]; if(!f.type.startsWith('audio/')){ if(uploadPreview) uploadPreview.textContent = 'Please select an audio file.'; return; } pendingFile = f; if(uploadPreview) uploadPreview.innerHTML = `<strong>${f.name}</strong> — ${(f.size/1024/1024).toFixed(2)} MB`; if(publish){ publish.disabled = false; publish.onclick = ()=>{ alert('Demo: file accepted for streaming (not uploaded).'); publish.disabled=true; }; } }
+
+      // ====== Legal modal ======
+      const legalModal = document.getElementById('legalModal');
+      const openLegalBtn = document.getElementById('openLegal');
+      const closeLegalBtn = document.getElementById('closeLegal');
+      const acceptLegalBtn = document.getElementById('acceptLegal');
+      if(openLegalBtn) openLegalBtn.addEventListener('click', ()=>{ legalModal && legalModal.classList.add('open'); legalModal && legalModal.setAttribute('aria-hidden','false'); });
+      if(closeLegalBtn) closeLegalBtn.addEventListener('click', closeLegal);
+      if(acceptLegalBtn) acceptLegalBtn.addEventListener('click', closeLegal);
+      function closeLegal(){ legalModal && legalModal.classList.remove('open'); legalModal && legalModal.setAttribute('aria-hidden','true'); }
+
+      // ====== Search & sort ======
+      const searchInput = document.getElementById('search');
+      const sortSelect = document.getElementById('sort');
+      if(searchInput) searchInput.addEventListener('input', (e)=>{ const q=e.target.value.toLowerCase(); renderCatalog(CATALOG.filter(i=> (i.title+i.producer+(i.genre||'')).toLowerCase().includes(q))); });
+      if(sortSelect) sortSelect.addEventListener('change', (e)=>{ const v=e.target.value; let arr=[...CATALOG]; if(v==='price-asc') arr.sort((a,b)=>a.price-b.price); if(v==='price-desc') arr.sort((a,b)=>b.price-a.price); renderCatalog(arr); });
+
+      // init
+      const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
+      renderCatalog(CATALOG);
+
+      // optionally scroll to upload when clicked
+      const scrollUpload = document.getElementById('scrollUpload'); if(scrollUpload) scrollUpload.addEventListener('click', ()=> document.getElementById('uploadSection').scrollIntoView({behavior:'smooth'}));
+
+    }); // end DOMContentLoaded
+  </script>
+
+  <!-- template for cards -->
+  <template id="cardTpl">
+    <div class="card">
+      <div class="cover">PREVIEW</div>
+      <h4 class="title">Title</h4>
+      <div class="meta">Producer • Genre • 120 BPM</div>
+      <div class="row">
+        <div style="display:flex;gap:8px">
+          <button class="btn play">Play</button>
+          <button class="btn add">Add to Cart</button>
+        </div>
+        <div class="price" style="margin-left:auto;font-weight:800">$9.99</div>
+      </div>
+    </div>
+  </template>
+</body>
+</html>
