@@ -1,0 +1,24 @@
+exports.webhook = async (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  const event = stripe.webhooks.constructEvent(
+    req.body,
+    sig,
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+
+    await pool.query(
+      "INSERT INTO purchases(user_id,beat_id,license_type,stripe_session_id) VALUES($1,$2,$3,$4)",
+      [
+        session.metadata.userId,
+        session.metadata.beatId,
+        session.metadata.licenseType,
+        session.id
+      ]
+    );
+  }
+
+  res.json({ received: true });
+};
