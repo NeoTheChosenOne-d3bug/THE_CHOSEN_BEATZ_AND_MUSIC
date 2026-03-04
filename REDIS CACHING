@@ -1,0 +1,14 @@
+const redis = require("../../config/redis");
+
+exports.getTrending = async (req, res) => {
+  const cached = await redis.get("trending");
+  if (cached) return res.json(JSON.parse(cached));
+
+  const result = await pool.query(
+    "SELECT * FROM beats ORDER BY score DESC LIMIT 20"
+  );
+
+  await redis.set("trending", JSON.stringify(result.rows), "EX", 300);
+
+  res.json(result.rows);
+};
