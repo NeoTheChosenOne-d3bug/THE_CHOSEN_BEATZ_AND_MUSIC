@@ -1,0 +1,55 @@
+  -- USERS
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  role TEXT DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- BEATS
+CREATE TABLE beats (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  genre TEXT,
+  bpm INTEGER,
+  mood TEXT,
+  producer_id UUID REFERENCES users(id),
+  s3_key TEXT NOT NULL,
+  cover_url TEXT,
+  plays INTEGER DEFAULT 0,
+  likes INTEGER DEFAULT 0,
+  saves INTEGER DEFAULT 0,
+  purchases INTEGER DEFAULT 0,
+  score FLOAT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- PURCHASES
+CREATE TABLE purchases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  beat_id UUID REFERENCES beats(id),
+  license_type TEXT,
+  stripe_session_id TEXT UNIQUE,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- LISTEN HISTORY
+CREATE TABLE listen_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  beat_id UUID REFERENCES beats(id),
+  watch_percent FLOAT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- ADS
+CREATE TABLE ads (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT,
+  image_url TEXT,
+  redirect_url TEXT,
+  bid_amount FLOAT,
+  relevance_score FLOAT,
+  active BOOLEAN DEFAULT true
