@@ -1,0 +1,36 @@
+TheChosenBeatz/
+├─ backend/
+│  ├─ package.json
+│  ├─ server.js
+│  ├─ config/
+│  │  ├─ db.js
+│  │  └─ redis.js
+│  ├─ modules/
+│  │  ├─ auth/
+│  │  │  └─ controller.js
+│  │  ├─ uploads/
+│  │  │  └─ controller.js
+│  │  └─ beats/
+│  │     └─ controller.js
+│  └─ routes/
+│     ├─ auth.js
+│     ├─ uploads.js
+│     └─ beats.js
+├─ frontend/
+│  ├─ package.json
+│  ├─ next.config.js
+│  ├─ app/
+│  │  ├─ layout.js
+│  │  ├─ page.js
+│  │  └─ components/
+│  │     ├─ Header.js
+│  │     ├─ Catalog.js
+│  │     ├─ Player.js
+│  │     ├─ Filters.js
+│  │     └─ Cart.js
+│  └─ public/
+│     ├─ assets/
+│     │  ├─ audio/
+│     │  └─ images/
+│     └─ favicon.ico
+└─ README.md
