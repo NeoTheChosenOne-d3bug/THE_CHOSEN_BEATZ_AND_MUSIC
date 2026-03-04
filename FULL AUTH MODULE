@@ -1,0 +1,38 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const pool = require("../../config/db");
+
+exports.register = async (req, res) => {
+  const { email, password } = req.body;
+  const hash = await bcrypt.hash(password, 12);
+
+  const user = await pool.query(
+    "INSERT INTO users(email,password_hash) VALUES($1,$2) RETURNING id,email",
+    [email, hash]
+  );
+
+  res.json(user.rows[0]);
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await pool.query(
+    "SELECT * FROM users WHERE email=$1",
+    [email]
+  );
+
+  if (!user.rows.length)
+    return res.status(400).json({ message: "User not found" });
+
+  const valid = await bcrypt.compare(password, user.rows[0].password_hash);
+  if (!valid)
+    return res.status(400).json({ message: "Invalid credentials" });
+
+  const accessToken = jwt.sign(
+    { id: user.rows[0].id, role: user.rows[0].role },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" }
+  );
+
+  res.json({ accessToken });
+};
