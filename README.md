@@ -3,7 +3,7 @@
 Next.js storefront for discovering and licensing original music production.
 
 ## Local development
-- Node.js 20 or 22
+- Node.js 22
 - npm install
 - npm run dev
 - npm run build
